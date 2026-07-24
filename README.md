@@ -3,25 +3,26 @@
 ![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
 ![Scikit-Learn](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange.svg)
 ![Streamlit](https://img.shields.io/badge/Web%20App-Streamlit-red.svg)
-![XGBoost](https://img.shields.io/badge/Model-XGBoost-green.svg)
 
 An end-to-end Machine Learning project that predicts a student's final academic performance based on their demographic, social, and lifestyle background. 
 
-This repository demonstrates the complete data science lifecycle: data preprocessing, feature engineering, training multiple regression algorithms, evaluating metrics, and deploying an interactive web application.
+This repository demonstrates a fundamental data science lifecycle: data cleaning, exploratory data analysis (EDA), feature encoding, feature scaling, training regression algorithms, and deploying an interactive web application. It is designed to be highly beginner-friendly, focusing on transparent, foundational data science concepts without relying on complex, black-box abstractions.
 
 ---
 
-## ✨ Features
+## ✨ Core Concepts Implemented
 
-- **Automated ML Pipeline:** A single `main.py` script executes the entire pipeline (cleaning, engineering, training, evaluating, and plotting).
-- **Multiple Algorithms:** Automatically trains and evaluates **Linear Regression, Decision Tree, Random Forest, Gradient Boosting, and XGBoost**.
-- **Interactive Web Dashboard:** Built with Streamlit, the app features a completely live-updating UI where tweaking sliders (like Study Time or Absences) recalculates predictions instantly.
-- **Engine Selection:** Users can dynamically switch between different ML models directly in the web UI to observe how different algorithms (like trees vs. linear models) interpret the exact same student data.
+- **Real-World Dataset:** Uses the UCI Student Performance dataset.
+- **Foundational Preprocessing:** Manual, transparent implementation of handling missing values, standard feature scaling, and one-hot encoding without black-box `sklearn` Pipelines.
+- **Classic Algorithms:** Trains and evaluates exactly three foundational models: **Linear Regression, Decision Tree, and Random Forest**.
+- **Model Evaluation:** Compares models using standard regression metrics: MAE, MSE, RMSE, and R².
+- **Interactive Web Dashboard:** Built with Streamlit, the app features a completely live-updating UI where tweaking sliders recalculates predictions instantly.
+- **Engine Selection:** Users can dynamically switch between the three ML models directly in the web UI to observe how different algorithms (like trees vs. linear models) interpret the exact same student data.
 
 ## 🧠 Interesting ML Insights (Outlier Distortion)
 While testing this dataset, an interesting real-world ML pitfall emerged: **Outlier Distortion in Linear Regression**. 
 Because the UCI dataset contains real students, a few "genius" outliers skipped dozens of classes but still passed. Because Linear Regression tries to draw a single straight line through the data, these outliers artificially skewed the slope upwards, causing the model to incorrectly assume *more absences = higher scores*. 
-Switching the web app engine to a **Gradient Boosting** or **Decision Tree** algorithm fixes this, as tree-based models handle extreme outliers much more logically!
+Switching the web app engine to a **Random Forest** or **Decision Tree** algorithm fixes this, as tree-based models handle extreme outliers much more logically!
 
 ## 📂 Repository Structure
 
@@ -59,7 +60,7 @@ Student-Performance-Prediction/
    ```bash
    python main.py
    ```
-   *(This will clean the data, train all 5 machine learning models, and generate evaluation plots in the `outputs/plots` folder).*
+   *(This will clean the data, train all 3 machine learning models, and generate evaluation plots in the `outputs/plots` folder).*
 
 4. **Launch the Web Dashboard:**
    ```bash

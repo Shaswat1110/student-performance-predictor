@@ -19,20 +19,14 @@ def load_assets(selected_model_option):
     
     preprocessor = joblib.load(os.path.join(model_dir, 'preprocessor.pkl'))
     
-    if selected_model_option == "Best Automatically Selected Model":
-        best_model = joblib.load(os.path.join(model_dir, 'best_model.pkl'))
-        with open(os.path.join(model_dir, 'best_model_name.txt'), 'r') as f:
-            actual_name = f.read().strip()
-        return preprocessor, best_model, actual_name
-    else:
-        model_filename = selected_model_option.replace(" ", "_") + ".pkl"
-        model = joblib.load(os.path.join(model_dir, model_filename))
-        return preprocessor, model, selected_model_option
+    model_filename = selected_model_option.replace(" ", "_") + ".pkl"
+    model = joblib.load(os.path.join(model_dir, model_filename))
+    return preprocessor, model, selected_model_option
 
 st.sidebar.markdown("### ⚙️ Engine Settings")
 selected_model_option = st.sidebar.selectbox(
     "Choose ML Algorithm",
-    ["Best Automatically Selected Model", "Linear Regression", "Decision Tree", "Random Forest", "Gradient Boosting", "XGBoost"]
+    ["Linear Regression", "Decision Tree", "Random Forest"]
 )
 
 try:
@@ -95,8 +89,17 @@ input_data = pd.DataFrame([{
     }])
     
 try:
-    # Preprocess
-    processed_data = preprocessor.transform(input_data)
+    # Preprocess using the saved dictionary
+    input_num = input_data[preprocessor['numerical_cols']]
+    input_cat = input_data[preprocessor['categorical_cols']]
+    
+    processed_num = preprocessor['scaler'].transform(input_num)
+    processed_cat = preprocessor['encoder'].transform(input_cat)
+    
+    # Combine numerical and categorical features
+    import numpy as np
+    processed_data = np.hstack((processed_num, processed_cat))
+    
     # Predict
     prediction = model.predict(processed_data)[0]
     

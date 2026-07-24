@@ -4,12 +4,8 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
-try:
-    from xgboost import XGBRegressor
-except ImportError:
-    XGBRegressor = None
 
 def train_and_evaluate_models(data_dir: str, model_dir: str):
     """
@@ -24,12 +20,8 @@ def train_and_evaluate_models(data_dir: str, model_dir: str):
     models = {
         "Linear Regression": LinearRegression(),
         "Decision Tree": DecisionTreeRegressor(random_state=42),
-        "Random Forest": RandomForestRegressor(n_estimators=100, random_state=42),
-        "Gradient Boosting": GradientBoostingRegressor(n_estimators=100, random_state=42)
+        "Random Forest": RandomForestRegressor(n_estimators=100, random_state=42)
     }
-    
-    if XGBRegressor is not None:
-        models["XGBoost"] = XGBRegressor(n_estimators=100, random_state=42)
         
     best_model_name = None
     best_model = None

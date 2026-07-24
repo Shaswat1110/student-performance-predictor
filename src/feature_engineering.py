@@ -4,13 +4,11 @@ import os
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 
 def engineer_features(input_path: str, output_dir: str):
     """
-    Applies Label/One-Hot encoding, Feature Scaling, and Train/Test Split.
-    Saves the processed arrays and the fitted preprocessor pipeline.
+    Applies One-Hot encoding, Feature Scaling, and Train/Test Split.
+    Saves the processed arrays and the fitted preprocessors.
     """
     print(f"Loading cleaned data from {input_path}...")
     df = pd.read_csv(input_path)
@@ -28,38 +26,35 @@ def engineer_features(input_path: str, output_dir: str):
     print(f"Categorical features ({len(categorical_cols)}): {categorical_cols}")
     print(f"Numerical features ({len(numerical_cols)}): {numerical_cols}")
     
-    # Create preprocessing pipelines for both numeric and categorical data
-    numeric_transformer = Pipeline(steps=[
-        ('scaler', StandardScaler())
-    ])
-    
-    categorical_transformer = Pipeline(steps=[
-        ('onehot', OneHotEncoder(handle_unknown='ignore', drop='first'))
-    ])
-    
-    # Combine preprocessing steps using ColumnTransformer
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ('num', numeric_transformer, numerical_cols),
-            ('cat', categorical_transformer, categorical_cols)
-        ])
-    
     # Split the data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     print("Fitting preprocessor and transforming data...")
-    # Fit on training data and transform both
-    X_train_processed = preprocessor.fit_transform(X_train)
-    X_test_processed = preprocessor.transform(X_test)
+    # Scale numerical features
+    scaler = StandardScaler()
+    X_train_num = scaler.fit_transform(X_train[numerical_cols])
+    X_test_num = scaler.transform(X_test[numerical_cols])
     
-    # Get feature names after one-hot encoding for feature importance plotting later
-    try:
-        # For newer scikit-learn versions
-        cat_feature_names = preprocessor.named_transformers_['cat'].get_feature_names_out(categorical_cols)
-        feature_names = numerical_cols + list(cat_feature_names)
-    except AttributeError:
-        # Fallback
-        feature_names = numerical_cols + [f"cat_{i}" for i in range(X_train_processed.shape[1] - len(numerical_cols))]
+    # Encode categorical features
+    encoder = OneHotEncoder(handle_unknown='ignore', drop='first', sparse_output=False)
+    X_train_cat = encoder.fit_transform(X_train[categorical_cols])
+    X_test_cat = encoder.transform(X_test[categorical_cols])
+    
+    # Combine features
+    X_train_processed = np.hstack((X_train_num, X_train_cat))
+    X_test_processed = np.hstack((X_test_num, X_test_cat))
+    
+    # Get feature names for plotting feature importance later
+    cat_feature_names = encoder.get_feature_names_out(categorical_cols)
+    feature_names = numerical_cols + list(cat_feature_names)
+    
+    # Create a preprocessor dictionary to save
+    preprocessor = {
+        'scaler': scaler,
+        'encoder': encoder,
+        'numerical_cols': numerical_cols,
+        'categorical_cols': categorical_cols
+    }
     
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(os.path.join(output_dir, '../models'), exist_ok=True)
