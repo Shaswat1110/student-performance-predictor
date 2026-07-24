@@ -19,10 +19,7 @@ This repository demonstrates a fundamental data science lifecycle: data cleaning
 - **Interactive Web Dashboard:** Built with Streamlit, the app features a completely live-updating UI where tweaking sliders recalculates predictions instantly.
 - **Engine Selection:** Users can dynamically switch between the three ML models directly in the web UI to observe how different algorithms (like trees vs. linear models) interpret the exact same student data.
 
-## 🧠 Interesting ML Insights (Outlier Distortion)
-While testing this dataset, an interesting real-world ML pitfall emerged: **Outlier Distortion in Linear Regression**. 
-Because the UCI dataset contains real students, a few "genius" outliers skipped dozens of classes but still passed. Because Linear Regression tries to draw a single straight line through the data, these outliers artificially skewed the slope upwards, causing the model to incorrectly assume *more absences = higher scores*. 
-Switching the web app engine to a **Random Forest** or **Decision Tree** algorithm fixes this, as tree-based models handle extreme outliers much more logically!
+
 
 ## 📂 Repository Structure
 

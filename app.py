@@ -26,7 +26,7 @@ def load_assets(selected_model_option):
 st.sidebar.markdown("### ⚙️ Engine Settings")
 selected_model_option = st.sidebar.selectbox(
     "Choose ML Algorithm",
-    ["Linear Regression", "Decision Tree", "Random Forest"]
+    ["Random Forest", "Linear Regression", "Decision Tree"]
 )
 
 try:
