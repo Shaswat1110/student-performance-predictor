@@ -8,6 +8,10 @@ An end-to-end Machine Learning project that predicts a student's final academic 
 
 This repository demonstrates a fundamental data science lifecycle: data cleaning, exploratory data analysis (EDA), feature encoding, feature scaling, training regression algorithms, and deploying an interactive web application. It is designed to be highly beginner-friendly, focusing on transparent, foundational data science concepts without relying on complex, black-box abstractions.
 
+## 🌐 Live Application
+You can try the live, interactive web dashboard here:
+**[Student Performance Predictor](https://student-performance-predictor-ml1.streamlit.app/)**
+
 ---
 
 ## ✨ Core Concepts Implemented
@@ -18,8 +22,13 @@ This repository demonstrates a fundamental data science lifecycle: data cleaning
 - **Model Evaluation:** Compares models using standard regression metrics: MAE, MSE, RMSE, and R².
 - **Interactive Web Dashboard:** Built with Streamlit, the app features a completely live-updating UI where tweaking sliders recalculates predictions instantly.
 - **Engine Selection:** Users can dynamically switch between the three ML models directly in the web UI to observe how different algorithms (like trees vs. linear models) interpret the exact same student data.
+- **Custom Profile Generation:** Dynamic state management allows users to build and save custom student profiles using all 30 parameters for immediate model evaluation.
 
+## 🧠 Key Data Insights
+During the development of this model, removing prior academic grades (`G1`, `G2`) forced the algorithm to predict final scores based strictly on demographics and lifestyle. This led to some fascinating real-world data insights:
 
+1. **The Anchoring Effect**: We found that extreme behaviors (like 90+ absences) do not automatically crash a student's predicted score to 0. Because the model evaluates all 30 parameters holistically, if the other 29 parameters reflect a highly supported, average student, the model anchors the score near the mean.
+2. **Counter-Intuitive Truths**: The absolute mathematically highest-scoring student profile in the dataset does *not* perfectly align with human intuition. The algorithm learned that students who receive **no** extra educational support or tutoring actually score the highest (likely because naturally gifted students don't seek out extra support). Furthermore, having exactly 0 absences was statistically less optimal than having a few (e.g., 4) absences!
 
 ## 📂 Repository Structure
 
