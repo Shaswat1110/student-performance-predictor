@@ -11,7 +11,7 @@ venv.bak/
 .env
 
 # Models and data
-models/
+# models/
 data/*.csv
 data/*.pkl
 outputs/
