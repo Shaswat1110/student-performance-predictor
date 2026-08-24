@@ -2,15 +2,13 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import numpy as np
 
 # Set page config
 st.set_page_config(page_title="Student Performance Predictor", page_icon="🎓", layout="wide")
 
 st.title("🎓 Student Performance Predictor")
-st.markdown("""
-This application predicts a student's final score (G3) based on their demographic, social, and academic background. 
-It uses a machine learning model trained on the UCI Student Performance dataset.
-""")
+st.markdown("This application predicts a student's final score (G3) based on their demographic, social, and academic background.")
 
 # Load model and preprocessor
 @st.cache_resource
@@ -83,64 +81,37 @@ if 'profiles' not in st.session_state:
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 👤 Student Profiles")
-st.sidebar.markdown("Instantly change hidden background features to see how the model reacts to different extremes.")
 profile_name = st.sidebar.selectbox("Load a preset background", list(st.session_state.profiles.keys()))
+
+st.sidebar.markdown("---")
+demo_mode = st.sidebar.checkbox("🌟 Presentation Demo Mode (Stretch Scores)")
+if demo_mode:
+    st.sidebar.info("Demo Mode scales predictions from 0 to 20 for dramatic effect during presentations.")
 
 p = st.session_state.profiles[profile_name]
 
-st.subheader("Student Lifestyle Tweaks")
-    
-col1, col2 = st.columns(2)
-
-with col1:
-    studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=p['studytime']-1)
-    absences = st.slider("Number of Absences", min_value=0, max_value=93, value=p['absences'])
-    failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=p['failures'])
-    activities = st.selectbox("Extra-curricular Activities", options=["yes", "no"], index=0 if p['activities']=="yes" else 1)
-    
-with col2:
-    internet = st.selectbox("Internet Access at Home", options=["yes", "no"], index=0 if p['internet']=="yes" else 1)
-    famrel = st.slider("Quality of Family Relationships", min_value=1, max_value=5, value=p['famrel'])
-    goout = st.slider("Going Out with Friends", min_value=1, max_value=5, value=p['goout'])
-    health = st.slider("Current Health Status", min_value=1, max_value=5, value=p['health'])
-
-# Create input dataframe matching the original training data format
-# We pull the 8 exposed parameters directly from the UI widgets above, 
-# and the 22 hidden parameters from the selected profile 'p'.
-input_data = pd.DataFrame([{
-        'school': p['school'], 'sex': p['sex'], 'age': p['age'], 'address': p['address'],
-        'famsize': p['famsize'], 'Pstatus': p['Pstatus'], 'Medu': p['Medu'], 'Fedu': p['Fedu'],
-        'Mjob': p['Mjob'], 'Fjob': p['Fjob'], 'reason': p['reason'], 'guardian': p['guardian'],
-        'traveltime': p['traveltime'], 'studytime': studytime, 'failures': failures,
-        'schoolsup': p['schoolsup'], 'famsup': p['famsup'], 'paid': p['paid'], 'activities': activities,
-        'nursery': p['nursery'], 'higher': p['higher'], 'internet': internet, 'romantic': p['romantic'],
-        'famrel': famrel, 'freetime': p['freetime'], 'goout': goout, 'Dalc': p['Dalc'],
-        'Walc': p['Walc'], 'health': health, 'absences': absences
-    }])
-    
-try:
-    input_num = input_data[preprocessor['numerical_cols']]
-    input_cat = input_data[preprocessor['categorical_cols']]
-    
-    processed_num = preprocessor['scaler'].transform(input_num)
-    processed_cat = preprocessor['encoder'].transform(input_cat)
-    
-    import numpy as np
-    processed_data = np.hstack((processed_num, processed_cat))
-    prediction = model.predict(processed_data)[0]
-    
-    st.success(f"### Predicted Final Score (G3): {prediction:.2f} / 20.00")
-    st.info(f"Model used for prediction: {model_name}")
-    
-except Exception as e:
-    st.error(f"Prediction error: {e}")
-
+# Placeholder for the score banner at the top
+score_placeholder = st.empty()
+info_placeholder = st.empty()
 st.markdown("---")
-with st.expander("➕ Create Custom Profile (30 Parameters)"):
-    st.write("Tweak the 8 sliders above, adjust the 22 hidden parameters below, and save as a completely custom profile!")
-    new_name = st.text_input("Profile Name (e.g. 'My Custom Student')")
+
+# The inputs are now housed in this expander at the bottom
+with st.expander("➕ Tweak All Student Parameters (Live Update)", expanded=False):
+    st.markdown("#### Core Lifestyle")
+    col1, col2 = st.columns(2)
+    with col1:
+        studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=p['studytime']-1)
+        absences = st.slider("Number of Absences", min_value=0, max_value=93, value=p['absences'])
+        failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=p['failures'])
+        activities = st.selectbox("Extra-curricular Activities", options=["yes", "no"], index=0 if p['activities']=="yes" else 1)
+        
+    with col2:
+        internet = st.selectbox("Internet Access at Home", options=["yes", "no"], index=0 if p['internet']=="yes" else 1)
+        famrel = st.slider("Quality of Family Relationships", min_value=1, max_value=5, value=p['famrel'])
+        goout = st.slider("Going Out with Friends", min_value=1, max_value=5, value=p['goout'])
+        health = st.slider("Current Health Status", min_value=1, max_value=5, value=p['health'])
     
-    st.markdown("#### 1. Demographics & Schooling")
+    st.markdown("#### Demographics & Schooling")
     colA, colB, colC = st.columns(3)
     with colA:
         new_school = st.selectbox("School", ["GP", "MS"], index=["GP", "MS"].index(p['school']))
@@ -152,7 +123,7 @@ with st.expander("➕ Create Custom Profile (30 Parameters)"):
         new_reason = st.selectbox("Reason for choosing school", ["home", "reputation", "course", "other"], index=["home", "reputation", "course", "other"].index(p['reason']))
         new_traveltime = st.slider("Travel Time to School", 1, 4, value=p['traveltime'])
 
-    st.markdown("#### 2. Family Background")
+    st.markdown("#### Family Background")
     colD, colE, colF = st.columns(3)
     with colD:
         new_famsize = st.selectbox("Family Size", ["LE3", "GT3"], index=["LE3", "GT3"].index(p['famsize']))
@@ -165,7 +136,7 @@ with st.expander("➕ Create Custom Profile (30 Parameters)"):
         new_Mjob = st.selectbox("Mother's Job", ["teacher", "health", "services", "at_home", "other"], index=["teacher", "health", "services", "at_home", "other"].index(p['Mjob']))
         new_Fjob = st.selectbox("Father's Job", ["teacher", "health", "services", "at_home", "other"], index=["teacher", "health", "services", "at_home", "other"].index(p['Fjob']))
 
-    st.markdown("#### 3. Support & Lifestyle")
+    st.markdown("#### Support & Extra Lifestyle")
     colG, colH, colI = st.columns(3)
     with colG:
         new_schoolsup = st.selectbox("Extra Educational Support", ["yes", "no"], index=["yes", "no"].index(p['schoolsup']))
@@ -180,38 +151,55 @@ with st.expander("➕ Create Custom Profile (30 Parameters)"):
         new_Dalc = st.slider("Workday Alcohol Consumption", 1, 5, value=p['Dalc'])
         new_freetime = st.slider("Amount of Free Time", 1, 5, value=p['freetime'])
         
-    if st.button("Save Profile"):
+    st.markdown("---")
+    new_name = st.text_input("Save as New Profile (Name)")
+    if st.button("Save Custom Profile"):
         if new_name:
             st.session_state.profiles[new_name] = {
-                "studytime": studytime,
-                "absences": absences,
-                "failures": failures,
-                "activities": activities,
-                "internet": internet,
-                "famrel": famrel,
-                "goout": goout,
-                "health": health,
-                "school": new_school,
-                "sex": new_sex,
-                "age": new_age,
-                "address": new_address,
-                "famsize": new_famsize,
-                "Pstatus": new_Pstatus,
-                "reason": new_reason,
-                "traveltime": new_traveltime,
-                "guardian": new_guardian,
-                "Medu": new_Medu,
-                "Fedu": new_Fedu,
-                "Mjob": new_Mjob,
-                "Fjob": new_Fjob,
-                "schoolsup": new_schoolsup,
-                "famsup": new_famsup,
-                "paid": new_paid,
-                "nursery": new_nursery,
-                "higher": new_higher,
-                "romantic": new_romantic,
-                "Walc": new_Walc,
-                "Dalc": new_Dalc,
-                "freetime": new_freetime
+                "studytime": studytime, "absences": absences, "failures": failures, "activities": activities,
+                "internet": internet, "famrel": famrel, "goout": goout, "health": health, "school": new_school,
+                "sex": new_sex, "age": new_age, "address": new_address, "famsize": new_famsize, "Pstatus": new_Pstatus,
+                "reason": new_reason, "traveltime": new_traveltime, "guardian": new_guardian, "Medu": new_Medu,
+                "Fedu": new_Fedu, "Mjob": new_Mjob, "Fjob": new_Fjob, "schoolsup": new_schoolsup, "famsup": new_famsup,
+                "paid": new_paid, "nursery": new_nursery, "higher": new_higher, "romantic": new_romantic,
+                "Walc": new_Walc, "Dalc": new_Dalc, "freetime": new_freetime
             }
             st.rerun()
+
+# --- PREDICTION LOGIC ---
+input_data = pd.DataFrame([{
+        'school': new_school, 'sex': new_sex, 'age': new_age, 'address': new_address,
+        'famsize': new_famsize, 'Pstatus': new_Pstatus, 'Medu': new_Medu, 'Fedu': new_Fedu,
+        'Mjob': new_Mjob, 'Fjob': new_Fjob, 'reason': new_reason, 'guardian': new_guardian,
+        'traveltime': new_traveltime, 'studytime': studytime, 'failures': failures,
+        'schoolsup': new_schoolsup, 'famsup': new_famsup, 'paid': new_paid, 'activities': activities,
+        'nursery': new_nursery, 'higher': new_higher, 'internet': internet, 'romantic': new_romantic,
+        'famrel': famrel, 'freetime': new_freetime, 'goout': goout, 'Dalc': new_Dalc,
+        'Walc': new_Walc, 'health': health, 'absences': absences
+    }])
+    
+try:
+    input_num = input_data[preprocessor['numerical_cols']]
+    input_cat = input_data[preprocessor['categorical_cols']]
+    
+    processed_num = preprocessor['scaler'].transform(input_num)
+    processed_cat = preprocessor['encoder'].transform(input_cat)
+    
+    processed_data = np.hstack((processed_num, processed_cat))
+    prediction = model.predict(processed_data)[0]
+    
+    if demo_mode:
+        # Stretch prediction from historical min/max (0.7 to 16.2) out to 0 to 20 range
+        min_pred = 0.71
+        max_pred = 16.20
+        # Normalize and scale
+        stretched = ((prediction - min_pred) / (max_pred - min_pred)) * 20.0
+        # Cap between 0 and 20
+        prediction = max(0.0, min(20.0, stretched))
+    
+    # Update the UI at the top
+    score_placeholder.success(f"### Predicted Final Score (G3): {prediction:.2f} / 20.00")
+    info_placeholder.info(f"Model used for prediction: {model_name}")
+    
+except Exception as e:
+    score_placeholder.error(f"Prediction error: {e}")
