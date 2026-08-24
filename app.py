@@ -37,12 +37,48 @@ except Exception as e:
 # --- PROFILE MANAGEMENT ---
 if 'profiles' not in st.session_state:
     st.session_state.profiles = {
-        "The Average Student": {"study": 2, "abs": 4, "fail": 0, "higher": "yes", "walc": 2, "dalc": 1, "freetime": 3, "goout": 3, "activities": "no", "internet": "yes", "famrel": 4, "health": 4},
-        "The High Achiever": {"study": 4, "abs": 0, "fail": 0, "higher": "yes", "walc": 1, "dalc": 1, "freetime": 2, "goout": 2, "activities": "yes", "internet": "yes", "famrel": 5, "health": 5},
-        "The Struggling Student": {"study": 1, "abs": 45, "fail": 3, "higher": "no", "walc": 5, "dalc": 3, "freetime": 5, "goout": 5, "activities": "no", "internet": "no", "famrel": 2, "health": 2},
-        "The Social Butterfly": {"study": 1, "abs": 12, "fail": 1, "higher": "yes", "walc": 4, "dalc": 2, "freetime": 5, "goout": 5, "activities": "yes", "internet": "yes", "famrel": 5, "health": 4},
-        "The Homebody": {"study": 3, "abs": 2, "fail": 0, "higher": "yes", "walc": 1, "dalc": 1, "freetime": 4, "goout": 1, "activities": "no", "internet": "yes", "famrel": 4, "health": 3},
-        "The Rebel": {"study": 1, "abs": 65, "fail": 4, "higher": "no", "walc": 5, "dalc": 5, "freetime": 5, "goout": 5, "activities": "no", "internet": "no", "famrel": 1, "health": 2}
+        "The Average Student": {
+            "studytime": 2, "absences": 4, "failures": 0, "higher": "yes", "Walc": 2, "Dalc": 1, 
+            "freetime": 3, "goout": 3, "activities": "no", "internet": "yes", "famrel": 4, "health": 4,
+            "school": "GP", "sex": "F", "age": 16, "address": "U", "famsize": "GT3", "Pstatus": "T",
+            "Medu": 2, "Fedu": 2, "Mjob": "other", "Fjob": "other", "reason": "course", "guardian": "mother",
+            "traveltime": 1, "schoolsup": "no", "famsup": "yes", "paid": "no", "nursery": "yes", "romantic": "no"
+        },
+        "The High Achiever": {
+            "studytime": 4, "absences": 0, "failures": 0, "higher": "yes", "Walc": 1, "Dalc": 1, 
+            "freetime": 2, "goout": 2, "activities": "yes", "internet": "yes", "famrel": 5, "health": 5,
+            "school": "GP", "sex": "F", "age": 15, "address": "U", "famsize": "GT3", "Pstatus": "T",
+            "Medu": 4, "Fedu": 4, "Mjob": "teacher", "Fjob": "teacher", "reason": "reputation", "guardian": "mother",
+            "traveltime": 1, "schoolsup": "yes", "famsup": "yes", "paid": "yes", "nursery": "yes", "romantic": "no"
+        },
+        "The Struggling Student": {
+            "studytime": 1, "absences": 45, "failures": 3, "higher": "no", "Walc": 5, "Dalc": 3, 
+            "freetime": 5, "goout": 5, "activities": "no", "internet": "no", "famrel": 2, "health": 2,
+            "school": "MS", "sex": "M", "age": 19, "address": "R", "famsize": "LE3", "Pstatus": "A",
+            "Medu": 1, "Fedu": 1, "Mjob": "at_home", "Fjob": "at_home", "reason": "course", "guardian": "other",
+            "traveltime": 4, "schoolsup": "no", "famsup": "no", "paid": "no", "nursery": "no", "romantic": "yes"
+        },
+        "The Social Butterfly": {
+            "studytime": 1, "absences": 12, "failures": 1, "higher": "yes", "Walc": 4, "Dalc": 2, 
+            "freetime": 5, "goout": 5, "activities": "yes", "internet": "yes", "famrel": 5, "health": 4,
+            "school": "GP", "sex": "F", "age": 16, "address": "U", "famsize": "GT3", "Pstatus": "T",
+            "Medu": 3, "Fedu": 3, "Mjob": "services", "Fjob": "services", "reason": "home", "guardian": "mother",
+            "traveltime": 1, "schoolsup": "no", "famsup": "yes", "paid": "no", "nursery": "yes", "romantic": "yes"
+        },
+        "The Homebody": {
+            "studytime": 3, "absences": 2, "failures": 0, "higher": "yes", "Walc": 1, "Dalc": 1, 
+            "freetime": 4, "goout": 1, "activities": "no", "internet": "yes", "famrel": 4, "health": 3,
+            "school": "GP", "sex": "M", "age": 15, "address": "U", "famsize": "GT3", "Pstatus": "T",
+            "Medu": 2, "Fedu": 2, "Mjob": "other", "Fjob": "other", "reason": "course", "guardian": "mother",
+            "traveltime": 1, "schoolsup": "no", "famsup": "yes", "paid": "yes", "nursery": "yes", "romantic": "no"
+        },
+        "The Rebel": {
+            "studytime": 1, "absences": 65, "failures": 4, "higher": "no", "Walc": 5, "Dalc": 5, 
+            "freetime": 5, "goout": 5, "activities": "no", "internet": "no", "famrel": 1, "health": 2,
+            "school": "MS", "sex": "M", "age": 18, "address": "U", "famsize": "GT3", "Pstatus": "A",
+            "Medu": 1, "Fedu": 1, "Mjob": "services", "Fjob": "other", "reason": "other", "guardian": "other",
+            "traveltime": 2, "schoolsup": "no", "famsup": "no", "paid": "no", "nursery": "no", "romantic": "yes"
+        }
     }
 
 st.sidebar.markdown("---")
@@ -57,9 +93,9 @@ st.subheader("Student Lifestyle Tweaks")
 col1, col2 = st.columns(2)
 
 with col1:
-    studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=p['study']-1)
-    absences = st.slider("Number of Absences", min_value=0, max_value=93, value=p['abs'])
-    failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=p['fail'])
+    studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=p['studytime']-1)
+    absences = st.slider("Number of Absences", min_value=0, max_value=93, value=p['absences'])
+    failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=p['failures'])
     activities = st.selectbox("Extra-curricular Activities", options=["yes", "no"], index=0 if p['activities']=="yes" else 1)
     
 with col2:
@@ -68,57 +104,29 @@ with col2:
     goout = st.slider("Going Out with Friends", min_value=1, max_value=5, value=p['goout'])
     health = st.slider("Current Health Status", min_value=1, max_value=5, value=p['health'])
 
-# Hardcode the less interesting demographic parameters behind the scenes
-school = 'GP'
-sex = 'F'
-age = 16
-address = 'U'
-famsize = 'GT3'
-Pstatus = 'T'
-Medu = 2
-Fedu = 2
-Mjob = 'other'
-Fjob = 'other'
-reason = 'course'
-guardian = 'mother'
-traveltime = 1
-schoolsup = 'no'
-famsup = 'yes'
-paid = 'no'
-nursery = 'yes'
-romantic = 'no'
-
-# Variables from profile (hidden from main UI but can be saved in custom profile)
-higher = p['higher']
-freetime = p['freetime']
-Dalc = p['dalc']
-Walc = p['walc']
-
 # Create input dataframe matching the original training data format
+# We pull the 8 exposed parameters directly from the UI widgets above, 
+# and the 22 hidden parameters from the selected profile 'p'.
 input_data = pd.DataFrame([{
-        'school': school, 'sex': sex, 'age': age, 'address': address,
-        'famsize': famsize, 'Pstatus': Pstatus, 'Medu': Medu, 'Fedu': Fedu,
-        'Mjob': Mjob, 'Fjob': Fjob, 'reason': reason, 'guardian': guardian,
-        'traveltime': traveltime, 'studytime': studytime, 'failures': failures,
-        'schoolsup': schoolsup, 'famsup': famsup, 'paid': paid, 'activities': activities,
-        'nursery': nursery, 'higher': higher, 'internet': internet, 'romantic': romantic,
-        'famrel': famrel, 'freetime': freetime, 'goout': goout, 'Dalc': Dalc,
-        'Walc': Walc, 'health': health, 'absences': absences
+        'school': p['school'], 'sex': p['sex'], 'age': p['age'], 'address': p['address'],
+        'famsize': p['famsize'], 'Pstatus': p['Pstatus'], 'Medu': p['Medu'], 'Fedu': p['Fedu'],
+        'Mjob': p['Mjob'], 'Fjob': p['Fjob'], 'reason': p['reason'], 'guardian': p['guardian'],
+        'traveltime': p['traveltime'], 'studytime': studytime, 'failures': failures,
+        'schoolsup': p['schoolsup'], 'famsup': p['famsup'], 'paid': p['paid'], 'activities': activities,
+        'nursery': p['nursery'], 'higher': p['higher'], 'internet': internet, 'romantic': p['romantic'],
+        'famrel': famrel, 'freetime': p['freetime'], 'goout': goout, 'Dalc': p['Dalc'],
+        'Walc': p['Walc'], 'health': health, 'absences': absences
     }])
     
 try:
-    # Preprocess using the saved dictionary
     input_num = input_data[preprocessor['numerical_cols']]
     input_cat = input_data[preprocessor['categorical_cols']]
     
     processed_num = preprocessor['scaler'].transform(input_num)
     processed_cat = preprocessor['encoder'].transform(input_cat)
     
-    # Combine numerical and categorical features
     import numpy as np
     processed_data = np.hstack((processed_num, processed_cat))
-    
-    # Predict
     prediction = model.predict(processed_data)[0]
     
     st.success(f"### Predicted Final Score (G3): {prediction:.2f} / 20.00")
@@ -128,32 +136,82 @@ except Exception as e:
     st.error(f"Prediction error: {e}")
 
 st.markdown("---")
-with st.expander("➕ Create Custom Profile"):
-    st.write("Tweak the sliders above, adjust the hidden parameters below, and save as a new profile!")
+with st.expander("➕ Create Custom Profile (30 Parameters)"):
+    st.write("Tweak the 8 sliders above, adjust the 22 hidden parameters below, and save as a completely custom profile!")
     new_name = st.text_input("Profile Name (e.g. 'My Custom Student')")
     
-    colA, colB = st.columns(2)
+    st.markdown("#### 1. Demographics & Schooling")
+    colA, colB, colC = st.columns(3)
     with colA:
-        new_higher = st.selectbox("Wants Higher Education", ["yes", "no"], index=0 if higher=="yes" else 1)
-        new_walc = st.slider("Weekend Alcohol Consumption", 1, 5, value=Walc)
+        new_school = st.selectbox("School", ["GP", "MS"], index=["GP", "MS"].index(p['school']))
+        new_sex = st.selectbox("Sex", ["F", "M"], index=["F", "M"].index(p['sex']))
     with colB:
-        new_dalc = st.slider("Workday Alcohol Consumption", 1, 5, value=Dalc)
-        new_freetime = st.slider("Amount of Free Time", 1, 5, value=freetime)
+        new_age = st.slider("Age", 15, 22, value=p['age'])
+        new_address = st.selectbox("Address Type", ["U", "R"], index=["U", "R"].index(p['address']))
+    with colC:
+        new_reason = st.selectbox("Reason for choosing school", ["home", "reputation", "course", "other"], index=["home", "reputation", "course", "other"].index(p['reason']))
+        new_traveltime = st.slider("Travel Time to School", 1, 4, value=p['traveltime'])
+
+    st.markdown("#### 2. Family Background")
+    colD, colE, colF = st.columns(3)
+    with colD:
+        new_famsize = st.selectbox("Family Size", ["LE3", "GT3"], index=["LE3", "GT3"].index(p['famsize']))
+        new_Pstatus = st.selectbox("Parents Cohabitation Status", ["T", "A"], index=["T", "A"].index(p['Pstatus']))
+        new_guardian = st.selectbox("Guardian", ["mother", "father", "other"], index=["mother", "father", "other"].index(p['guardian']))
+    with colE:
+        new_Medu = st.slider("Mother's Education (0-4)", 0, 4, value=p['Medu'])
+        new_Fedu = st.slider("Father's Education (0-4)", 0, 4, value=p['Fedu'])
+    with colF:
+        new_Mjob = st.selectbox("Mother's Job", ["teacher", "health", "services", "at_home", "other"], index=["teacher", "health", "services", "at_home", "other"].index(p['Mjob']))
+        new_Fjob = st.selectbox("Father's Job", ["teacher", "health", "services", "at_home", "other"], index=["teacher", "health", "services", "at_home", "other"].index(p['Fjob']))
+
+    st.markdown("#### 3. Support & Lifestyle")
+    colG, colH, colI = st.columns(3)
+    with colG:
+        new_schoolsup = st.selectbox("Extra Educational Support", ["yes", "no"], index=["yes", "no"].index(p['schoolsup']))
+        new_famsup = st.selectbox("Family Educational Support", ["yes", "no"], index=["yes", "no"].index(p['famsup']))
+        new_paid = st.selectbox("Extra Paid Classes", ["yes", "no"], index=["yes", "no"].index(p['paid']))
+    with colH:
+        new_nursery = st.selectbox("Attended Nursery School", ["yes", "no"], index=["yes", "no"].index(p['nursery']))
+        new_higher = st.selectbox("Wants Higher Education", ["yes", "no"], index=["yes", "no"].index(p['higher']))
+        new_romantic = st.selectbox("In a Romantic Relationship", ["yes", "no"], index=["yes", "no"].index(p['romantic']))
+    with colI:
+        new_Walc = st.slider("Weekend Alcohol Consumption", 1, 5, value=p['Walc'])
+        new_Dalc = st.slider("Workday Alcohol Consumption", 1, 5, value=p['Dalc'])
+        new_freetime = st.slider("Amount of Free Time", 1, 5, value=p['freetime'])
         
     if st.button("Save Profile"):
         if new_name:
             st.session_state.profiles[new_name] = {
-                "study": studytime,
-                "abs": absences,
-                "fail": failures,
+                "studytime": studytime,
+                "absences": absences,
+                "failures": failures,
                 "activities": activities,
                 "internet": internet,
                 "famrel": famrel,
                 "goout": goout,
                 "health": health,
+                "school": new_school,
+                "sex": new_sex,
+                "age": new_age,
+                "address": new_address,
+                "famsize": new_famsize,
+                "Pstatus": new_Pstatus,
+                "reason": new_reason,
+                "traveltime": new_traveltime,
+                "guardian": new_guardian,
+                "Medu": new_Medu,
+                "Fedu": new_Fedu,
+                "Mjob": new_Mjob,
+                "Fjob": new_Fjob,
+                "schoolsup": new_schoolsup,
+                "famsup": new_famsup,
+                "paid": new_paid,
+                "nursery": new_nursery,
                 "higher": new_higher,
-                "walc": new_walc,
-                "dalc": new_dalc,
+                "romantic": new_romantic,
+                "Walc": new_Walc,
+                "Dalc": new_Dalc,
                 "freetime": new_freetime
             }
             st.rerun()
