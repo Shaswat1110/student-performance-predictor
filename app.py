@@ -83,11 +83,6 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### 👤 Student Profiles")
 profile_name = st.sidebar.selectbox("Load a preset background", list(st.session_state.profiles.keys()))
 
-st.sidebar.markdown("---")
-demo_mode = st.sidebar.checkbox("🌟 Presentation Demo Mode (Stretch Scores)")
-if demo_mode:
-    st.sidebar.info("Demo Mode scales predictions from 0 to 20 for dramatic effect during presentations.")
-
 p = st.session_state.profiles[profile_name]
 
 # Placeholder for the score banner at the top
@@ -187,15 +182,6 @@ try:
     
     processed_data = np.hstack((processed_num, processed_cat))
     prediction = model.predict(processed_data)[0]
-    
-    if demo_mode:
-        # Stretch prediction from historical min/max (0.7 to 16.2) out to 0 to 20 range
-        min_pred = 0.71
-        max_pred = 16.20
-        # Normalize and scale
-        stretched = ((prediction - min_pred) / (max_pred - min_pred)) * 20.0
-        # Cap between 0 and 20
-        prediction = max(0.0, min(20.0, stretched))
     
     # Update the UI at the top
     score_placeholder.success(f"### Predicted Final Score (G3): {prediction:.2f} / 20.00")
