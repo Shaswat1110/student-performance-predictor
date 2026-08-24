@@ -36,14 +36,47 @@ except Exception as e:
     st.error(f"Error loading models. Have you trained them yet? \n({e})")
     st.stop()
 
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 👤 Student Profiles")
+st.sidebar.markdown("Instantly change hidden background features to see how the model reacts to different extremes.")
+profile = st.sidebar.selectbox(
+    "Load a preset background",
+    ["The Average Student", "The High Achiever", "The Struggling Student"]
+)
+
+if profile == "The High Achiever":
+    def_study = 4
+    def_abs = 0
+    def_fail = 0
+    def_higher = 'yes'
+    def_walc = 1
+    def_dalc = 1
+    def_freetime = 2
+elif profile == "The Struggling Student":
+    def_study = 1
+    def_abs = 45
+    def_fail = 3
+    def_higher = 'no'
+    def_walc = 5
+    def_dalc = 3
+    def_freetime = 5
+else: # Average Student
+    def_study = 2
+    def_abs = 4
+    def_fail = 0
+    def_higher = 'yes'
+    def_walc = 2
+    def_dalc = 1
+    def_freetime = 3
+
 st.subheader("Student Lifestyle Tweaks")
     
 col1, col2 = st.columns(2)
 
 with col1:
-    studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=1)
-    absences = st.slider("Number of Absences", min_value=0, max_value=93, value=4)
-    failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=0)
+    studytime = st.selectbox("Study Time", options=[1, 2, 3, 4], format_func=lambda x: ["<2 hrs", "2-5 hrs", "5-10 hrs", ">10 hrs"][x-1], index=def_study-1)
+    absences = st.slider("Number of Absences", min_value=0, max_value=93, value=def_abs)
+    failures = st.number_input("Past Class Failures", min_value=0, max_value=4, value=def_fail)
     activities = st.selectbox("Extra-curricular Activities", options=["yes", "no"])
     
 with col2:
@@ -70,11 +103,11 @@ schoolsup = 'no'
 famsup = 'yes'
 paid = 'no'
 nursery = 'yes'
-higher = 'yes'
+higher = def_higher
 romantic = 'no'
-freetime = 3
-Dalc = 1
-Walc = 1
+freetime = def_freetime
+Dalc = def_dalc
+Walc = def_walc
 
 # Create input dataframe matching the original training data format
 input_data = pd.DataFrame([{
