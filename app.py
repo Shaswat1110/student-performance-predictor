@@ -43,11 +43,11 @@ if 'profiles' not in st.session_state:
             "traveltime": 1, "schoolsup": "no", "famsup": "yes", "paid": "no", "nursery": "yes", "romantic": "no"
         },
         "The High Achiever": {
-            "studytime": 4, "absences": 0, "failures": 0, "higher": "yes", "Walc": 1, "Dalc": 1, 
-            "freetime": 2, "goout": 2, "activities": "yes", "internet": "yes", "famrel": 5, "health": 5,
-            "school": "GP", "sex": "F", "age": 15, "address": "U", "famsize": "GT3", "Pstatus": "T",
-            "Medu": 4, "Fedu": 4, "Mjob": "teacher", "Fjob": "teacher", "reason": "reputation", "guardian": "mother",
-            "traveltime": 1, "schoolsup": "yes", "famsup": "yes", "paid": "yes", "nursery": "yes", "romantic": "no"
+            "studytime": 4, "absences": 4, "failures": 0, "higher": "yes", "Walc": 1, "Dalc": 1, 
+            "freetime": 2, "goout": 2, "activities": "yes", "internet": "yes", "famrel": 4, "health": 2,
+            "school": "GP", "sex": "M", "age": 16, "address": "U", "famsize": "GT3", "Pstatus": "T",
+            "Medu": 4, "Fedu": 3, "Mjob": "health", "Fjob": "services", "reason": "reputation", "guardian": "mother",
+            "traveltime": 1, "schoolsup": "no", "famsup": "no", "paid": "no", "nursery": "yes", "romantic": "no"
         },
         "The Struggling Student": {
             "studytime": 1, "absences": 45, "failures": 3, "higher": "no", "Walc": 5, "Dalc": 3, 
